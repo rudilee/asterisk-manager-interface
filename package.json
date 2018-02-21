@@ -21,5 +21,8 @@
   "bugs": {
     "url": "https://github.com/rudilee/asterisk-manager-interface/issues"
   },
-  "homepage": "https://github.com/rudilee/asterisk-manager-interface#readme"
+  "homepage": "https://github.com/rudilee/asterisk-manager-interface#readme",
+  "devDependencies": {
+    "jest": "^22.4.0"
+  }
 }
