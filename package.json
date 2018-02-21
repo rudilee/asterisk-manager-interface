@@ -23,6 +23,23 @@
   },
   "homepage": "https://github.com/rudilee/asterisk-manager-interface#readme",
   "devDependencies": {
-    "jest": "^22.4.0"
+    "@types/jest": "^22.1.3",
+    "jest": "^22.4.0",
+    "ts-jest": "^22.0.4",
+    "typescript": "^2.7.2"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testRegex": "(/test/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ]
   }
 }
