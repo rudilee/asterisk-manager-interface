@@ -1,0 +1,25 @@
+{
+  "name": "asterisk-manager-interface",
+  "version": "1.0.0",
+  "description": "Node.js client to connect to Asterisk Manager Interface (AMI)",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/rudilee/asterisk-manager-interface.git"
+  },
+  "keywords": [
+    "asterisk",
+    "voip",
+    "asterisk manager interface",
+    "ami"
+  ],
+  "author": "Rudi Lee <quadhack@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rudilee/asterisk-manager-interface/issues"
+  },
+  "homepage": "https://github.com/rudilee/asterisk-manager-interface#readme"
+}
