@@ -41,5 +41,9 @@
       "json",
       "node"
     ]
+  },
+  "dependencies": {
+    "@types/node": "^9.4.6",
+    "uuid": "^3.2.1"
   }
 }
