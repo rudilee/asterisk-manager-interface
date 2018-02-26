@@ -12,6 +12,10 @@ enum Actions {
     Logoff = "Logoff"
 }
 
+export enum Events {
+    FullyBooted = "FullyBooted"
+}
+
 interface Message {
     type: MessageType;
     response?: string;
@@ -103,10 +107,12 @@ export class AsteriskManagerInterface extends Socket {
         }
     }
 
-    private sendAction(action: string, headers: any, handler: (response: string, headers: any) => void): boolean {
+    private sendAction(action: string, headers: any, handler?: (response: string, headers: any) => void): boolean {
         headers.ActionID = uuidv4();
 
-        this.once(headers.ActionID, handler);
+        if (handler) {
+            this.once(headers.ActionID, handler);
+        }
 
         return this.write(this.formatRawMessage(action, headers));
     }
