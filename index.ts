@@ -8,7 +8,8 @@ enum MessageType {
 }
 
 enum Actions {
-    Login = "Login"
+    Login = "Login",
+    Logoff = "Logoff"
 }
 
 interface Message {
@@ -112,5 +113,9 @@ export class AsteriskManagerInterface extends Socket {
 
     public login(headers: LoginHeaders, handler: (response: string, headers: any) => void): boolean {
         return this.sendAction(Actions.Login, headers, handler);
+    }
+
+    public logoff(handler: (response: string, headers: any) => void): boolean {
+        return this.sendAction(Actions.Logoff, {}, handler);
     }
 }
