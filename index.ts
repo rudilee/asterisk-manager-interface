@@ -28,7 +28,12 @@ interface LoginHeaders {
     Secret: string;
 }
 
+const LINE_DELIMITER = "\r\n";
+const PACKET_DELIMITER = LINE_DELIMITER + LINE_DELIMITER;
+
 export class AsteriskManagerInterface extends Socket {
+    private buffer: string = "";
+
     constructor() {
         super();
 
@@ -39,10 +44,10 @@ export class AsteriskManagerInterface extends Socket {
         let rawMessage = `Action: ${action}`;
         
         for (let header in headers) {
-            rawMessage += `\r\n${header}: ${headers[header]}`;
+            rawMessage += `${LINE_DELIMITER}${header}: ${headers[header]}`;
         };
 
-        return `${rawMessage}\r\n\r\n`;
+        return `${rawMessage}${PACKET_DELIMITER}`;
     }
 
     private parseMessage(rawMessage: string): Message {
@@ -52,8 +57,12 @@ export class AsteriskManagerInterface extends Socket {
             headers: {}
         };
 
-        let headers = rawMessage.split("\r\n");
+        let headers = rawMessage.split(LINE_DELIMITER);
 
+        if (headers[0].startsWith("Asterisk Call Manager")) {
+            let banner = headers.shift();
+        }
+        
         for (const header of headers) {
             let tag = header.split(": ");
 
@@ -78,31 +87,33 @@ export class AsteriskManagerInterface extends Socket {
     }
 
     private dataEventHandler(data: Buffer) {
-        let messages = data.toString().split("\r\n\r\n");
+        this.buffer += data.toString();
 
-        if (messages[0].startsWith("Asterisk Call Manager")) {
-            let banner = messages.shift();
-        }
-        
-        for (const rawMessage of messages) {
-            if (rawMessage == "") {
-                continue;
+        if (this.buffer.endsWith(PACKET_DELIMITER)) {
+            let messages = this.buffer.split(PACKET_DELIMITER);
+    
+            for (const rawMessage of messages) {
+                if (rawMessage == "") {
+                    continue;
+                }
+    
+                let message = this.parseMessage(rawMessage);
+    
+                switch (message.type) {
+                    case MessageType.Response:
+                        let actionId = message.headers.ActionID;
+                        delete message.headers.ActionID;
+    
+                        this.emit(actionId, message.name, message.headers);
+                        break;
+    
+                    case MessageType.Event:
+                        this.emit(message.name, message.headers);
+                        break;
+                }
             }
 
-            let message = this.parseMessage(rawMessage);
-
-            switch (message.type) {
-                case MessageType.Response:
-                    let actionId = message.headers.ActionID;
-                    delete message.headers.ActionID;
-
-                    this.emit(actionId, message.name, message.headers);
-                    break;
-
-                case MessageType.Event:
-                    this.emit(message.name, message.headers);
-                    break;
-            }
+            this.buffer = "";
         }
     }
 
