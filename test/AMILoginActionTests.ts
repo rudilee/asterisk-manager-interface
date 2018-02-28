@@ -12,7 +12,7 @@ afterEach(() => {
 });
 
 test("send Login action with correct credentials get Success response from AMI", done => {
-    this.asterisk.connect(5038, "192.168.99.128", () => {
+    this.asterisk.connect(5038, "localhost", () => {
         this.asterisk.login({
             Username: "test",
             Secret: "12345"
@@ -24,7 +24,7 @@ test("send Login action with correct credentials get Success response from AMI",
 });
 
 test("send Login action with incorrect credentials get Error response from AMI", done => {
-    this.asterisk.connect(5038, "192.168.99.128", () => {
+    this.asterisk.connect(5038, "localhost", () => {
         this.asterisk.login({
             Username: "tests",
             Secret: "123456"
@@ -41,7 +41,7 @@ test("after successful login receive FullyBooted event from AMI", done => {
         done();
     });
 
-    this.asterisk.connect(5038, "192.168.99.128", () => {
+    this.asterisk.connect(5038, "localhost", () => {
         this.asterisk.login({
             Username: "test",
             Secret: "12345"
