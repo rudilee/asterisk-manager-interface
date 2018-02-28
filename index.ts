@@ -10,7 +10,8 @@ enum MessageType {
 
 enum Actions {
     Login = "Login",
-    Logoff = "Logoff"
+    Logoff = "Logoff",
+    Originate = "Originate"
 }
 
 export enum Events {
@@ -23,9 +24,31 @@ interface Message {
     headers: any;
 }
 
-interface LoginHeaders {
+interface Headers {
+    ActionID?: string
+}
+
+interface LoginHeaders extends Headers {
     Username: string;
     Secret: string;
+}
+
+interface OriginateHeaders extends Headers {
+    Channel: string,
+    Exten?: string,
+    Context?: string,
+    Priority?: number,
+    Application?: string,
+    Data?: string,
+    Timeout?: number,
+    CallerID?: string,
+    Variable?: string,
+    Account?: string,
+    EarlyMedia?: boolean,
+    Async?: boolean,
+    Codecs?: string,
+    ChannelId?: string,
+    OtherChannelId?: string
 }
 
 const LINE_DELIMITER = "\r\n";
@@ -118,7 +141,9 @@ export class AsteriskManagerInterface extends Socket {
     }
 
     private sendAction(action: string, headers: any, handler?: (response: string, headers: any) => void): boolean {
-        headers.ActionID = uuidv4();
+        if (!headers.ActionID) {
+            headers.ActionID = uuidv4();
+        }
 
         if (handler) {
             this.once(headers.ActionID, handler);
@@ -131,7 +156,11 @@ export class AsteriskManagerInterface extends Socket {
         return this.sendAction(Actions.Login, headers, handler);
     }
 
-    public logoff(handler: (response: string, headers: any) => void): boolean {
+    public logoff(handler?: (response: string, headers: any) => void): boolean {
         return this.sendAction(Actions.Logoff, {}, handler);
+    }
+
+    public originate(headers: OriginateHeaders, handler?: (response: string, headers: any) => void): boolean {
+        return this.sendAction(Actions.Originate, headers, handler);
     }
 }
