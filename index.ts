@@ -66,8 +66,14 @@ export class AsteriskManagerInterface extends Socket {
     private formatRawMessage(action: string, headers: any): string {
         let rawMessage = `Action: ${action}`;
         
-        for (let header in headers) {
-            rawMessage += `${LINE_DELIMITER}${header}: ${headers[header]}`;
+        for (const header in headers) {
+            if (Object.prototype.toString.call(headers[header]) === "[object Object]") {
+                for (const key in headers[header]) {
+                    rawMessage += `${LINE_DELIMITER}${header}: ${key}=${headers[header][key]}`;
+                }
+            } else {
+                rawMessage += `${LINE_DELIMITER}${header}: ${headers[header]}`;
+            }
         };
 
         return `${rawMessage}${PACKET_DELIMITER}`;
