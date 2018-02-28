@@ -31,11 +31,14 @@ test("call originate function with all complete headers fields", () => {
         Data: "tt-monkeys",
         Timeout: 1000,
         CallerID: "1234",
-        Variable: "FOO=BAR",
+        Variable: {
+            FOO: "Bar",
+            FIZZ: "Buzz"
+        },
         Account: "DOCUMENTATION",
         EarlyMedia: true,
         Async: true,
-        Codecs: "ulaw,alaw",
+        Codecs: ["ulaw", "alaw"],
         ChannelId: "1234567890.123",
         OtherChannelId: "1234567890.123"
     });
@@ -50,7 +53,8 @@ Application: Playback\r\n\
 Data: tt-monkeys\r\n\
 Timeout: 1000\r\n\
 CallerID: 1234\r\n\
-Variable: FOO=BAR\r\n\
+Variable: FOO=Bar\r\n\
+Variable: FIZZ=Buzz\r\n\
 Account: DOCUMENTATION\r\n\
 EarlyMedia: true\r\n\
 Async: true\r\n\
