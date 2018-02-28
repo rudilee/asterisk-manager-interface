@@ -3,6 +3,7 @@ import {Socket} from "net";
 import uuidv4 = require("uuid/v4");
 
 enum MessageType {
+    Unknown,
     Response = "Response",
     Event = "Event"
 }
@@ -18,8 +19,7 @@ export enum Events {
 
 interface Message {
     type: MessageType;
-    response?: string;
-    event?: string;
+    name: string;
     headers: any;
 }
 
@@ -46,7 +46,12 @@ export class AsteriskManagerInterface extends Socket {
     }
 
     private parseMessage(rawMessage: string): Message {
-        let message: Message;
+        let message: Message = {
+            type: MessageType.Unknown,
+            name: "",
+            headers: {}
+        };
+
         let headers = rawMessage.split("\r\n");
 
         for (const header of headers) {
@@ -54,19 +59,13 @@ export class AsteriskManagerInterface extends Socket {
 
             switch (tag[0]) {
                 case MessageType.Response:
-                    message = {
-                        type: MessageType.Response,
-                        response: tag[1],
-                        headers: {}
-                    };
+                    message.type = MessageType.Response;
+                    message.name = tag[1];
                     break;
 
                 case MessageType.Event:
-                    message = {
-                        type: MessageType.Event,
-                        event: tag[1],
-                        headers: {}
-                    };
+                    message.type = MessageType.Event;
+                    message.name = tag[1];
                     break;
             
                 default:
@@ -97,11 +96,11 @@ export class AsteriskManagerInterface extends Socket {
                     let actionId = message.headers.ActionID;
                     delete message.headers.ActionID;
 
-                    this.emit(actionId, message.response, message.headers);
+                    this.emit(actionId, message.name, message.headers);
                     break;
 
                 case MessageType.Event:
-                    this.emit(message.event, message.headers);
+                    this.emit(message.name, message.headers);
                     break;
             }
         }
