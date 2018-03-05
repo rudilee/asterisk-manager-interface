@@ -158,7 +158,7 @@ export class AsteriskManagerInterface extends Socket {
         return this.write(this.formatRawMessage(action, headers));
     }
 
-    public login(headers: LoginHeaders, handler: (response: string, headers: any) => void): boolean {
+    public login(headers: LoginHeaders, handler?: (response: string, headers: any) => void): boolean {
         return this.sendAction(Actions.Login, headers, handler);
     }
 
