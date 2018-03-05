@@ -9,6 +9,7 @@ enum MessageType {
 }
 
 enum Actions {
+    Bridge = "Bridge",
     Login = "Login",
     Logoff = "Logoff",
     Originate = "Originate"
@@ -16,6 +17,13 @@ enum Actions {
 
 export enum Events {
     FullyBooted = "FullyBooted"
+}
+
+export enum Tones {
+    no = "no",
+    Channel1 = "Channel1",
+    Channel2 = "Channel2",
+    Both = "Both"
 }
 
 interface Message {
@@ -49,6 +57,12 @@ interface OriginateHeaders extends Headers {
     Codecs?: string,
     ChannelId?: string,
     OtherChannelId?: string
+}
+
+interface BridgeHeaders extends Headers {
+    Channel1: string,
+    Channel2: string,
+    Tone?: Tones
 }
 
 const LINE_DELIMITER = "\r\n";
@@ -156,6 +170,10 @@ export class AsteriskManagerInterface extends Socket {
         }
 
         return this.write(this.formatRawMessage(action, headers));
+    }
+
+    public bridge(headers: BridgeHeaders, handler?: (response: string, headers: any) => void): boolean {
+        return this.sendAction(Actions.Bridge, headers, handler);
     }
 
     public login(headers: LoginHeaders, handler?: (response: string, headers: any) => void): boolean {
