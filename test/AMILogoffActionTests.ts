@@ -1,4 +1,4 @@
-import {AsteriskManagerInterface as AMI} from "..";
+import { AsteriskManagerInterface as AMI } from "..";
 
 beforeEach(() => {
     this.asterisk = new AMI;
