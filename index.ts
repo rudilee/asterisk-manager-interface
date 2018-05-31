@@ -1,6 +1,6 @@
 import {Socket} from "net";
 
-import uuidv4 = require("uuid/v4");
+import * as uuid from "uuid/v4";
 
 enum MessageType {
     Unknown,
@@ -162,7 +162,7 @@ export class AsteriskManagerInterface extends Socket {
 
     private sendAction(action: string, headers: any, handler?: (response: string, headers: any) => void): boolean {
         if (!headers.ActionID) {
-            headers.ActionID = uuidv4();
+            headers.ActionID = uuid();
         }
 
         if (handler) {
