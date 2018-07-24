@@ -160,7 +160,7 @@ export class AsteriskManagerInterface extends Socket {
         }
     }
 
-    private sendAction(action: string, headers: any, handler?: (response: string, headers: any) => void): boolean {
+    public sendAction(action: string, headers: any, handler?: (response: string, headers: any) => void): boolean {
         if (!headers.ActionID) {
             headers.ActionID = uuid();
         }
