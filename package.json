@@ -1,6 +1,6 @@
 {
   "name": "asterisk-manager-interface",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Node.js client to connect to Asterisk Manager Interface (AMI)",
   "main": "index.js",
   "scripts": {
