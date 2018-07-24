@@ -50,11 +50,11 @@ interface OriginateHeaders extends Headers {
     Data?: string,
     Timeout?: number,
     CallerID?: string,
-    Variable?: string,
+    Variable?: any,
     Account?: string,
     EarlyMedia?: boolean,
     Async?: boolean,
-    Codecs?: string,
+    Codecs?: Array<string>,
     ChannelId?: string,
     OtherChannelId?: string
 }
